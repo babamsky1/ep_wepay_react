@@ -146,7 +146,6 @@ export function useLineItems({
                     : "N"
                   : item.is_confidential,
                 updated_by: currentUser,
-                updated_at: now,
               }
             : item,
         ),

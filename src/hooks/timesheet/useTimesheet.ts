@@ -44,14 +44,8 @@ const splitEmployeeName = (fullName: string) => {
 };
 
 const validateFile = (file: File): string | null => {
-  // Validate file size (max 10MB)
   if (file.size > 10 * 1024 * 1024) {
     return 'File size must be less than 10MB';
-  }
-
-  // Upload only accepts .txt files
-  if (!file.name.toLowerCase().endsWith('.txt')) {
-    return 'Please upload a valid text file (.txt)';
   }
 
   return null;

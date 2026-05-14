@@ -138,7 +138,7 @@ export const UserDialog = ({
 
               <div className="space-y-2">
                 <label className="text-sm font-medium text-slate-700">
-                  First Name
+                  First Name <span className="text-red-500">*</span>
                 </label>
                 <Input
                   value={formData.firstName}
@@ -152,7 +152,7 @@ export const UserDialog = ({
 
               <div className="space-y-2">
                 <label className="text-sm font-medium text-slate-700">
-                  Last Name
+                  Last Name <span className="text-red-500">*</span>
                 </label>
                 <Input
                   value={formData.lastName}
@@ -166,7 +166,7 @@ export const UserDialog = ({
 
               <div className="space-y-2">
                 <label className="text-sm font-medium text-slate-700">
-                  Email
+                  Email <span className="text-red-500">*</span>
                 </label>
                 <Input
                   type="email"
@@ -181,7 +181,7 @@ export const UserDialog = ({
 
               <div className="space-y-2">
                 <label className="text-sm font-medium text-slate-700">
-                  Password
+                  Password {!editingUser && <span className="text-red-500">*</span>}
                 </label>
                 <div className="relative">
                   <Input
@@ -207,7 +207,7 @@ export const UserDialog = ({
 
               <div className="space-y-2">
                 <label className="text-sm font-medium text-slate-700">
-                  Confirm Password
+                  Confirm Password {!editingUser && <span className="text-red-500">*</span>}
                 </label>
                 <div className="relative">
                   <Input

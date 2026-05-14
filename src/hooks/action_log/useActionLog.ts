@@ -250,13 +250,7 @@ export function useActionLog(tableName: 'Employee' | 'TimesheetRecord', parser: 
   });
 
   const actionLogEntries = useMemo((): ActionLogEntry[] => {
-    return logs
-      .map(parser)
-      .sort((a, b) => {
-        if (!a.timestamp) return 1;
-        if (!b.timestamp) return -1;
-        return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
-      });
+    return logs.map(parser);
   }, [logs, parser]);
 
   return { actionLogEntries, formatDateTime, isLoading, error: error?.message || null };

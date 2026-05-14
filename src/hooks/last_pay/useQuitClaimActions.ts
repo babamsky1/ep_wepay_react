@@ -192,15 +192,11 @@ export function useQuitClaimActions({ data, ref_no, navigate }: Props) {
 
   // ---- Cache helpers ----
 
-  // Updates the single-record cache and the list cache.
+  // Updates the single-record cache and invalidates the list so it auto-refetches.
   const updateCache = useCallback(
     (record: LastPayRecord) => {
       queryClient.setQueryData(["record", record.ref_no], record);
-      queryClient.setQueryData(
-        ["allRecords"],
-        (old: LastPayRecord[] | undefined) =>
-          old?.map((r) => (r.ref_no === record.ref_no ? record : r)),
-      );
+      queryClient.invalidateQueries({ queryKey: ["allRecords"] });
     },
     [queryClient],
   );
@@ -228,11 +224,6 @@ export function useQuitClaimActions({ data, ref_no, navigate }: Props) {
   const removeFromCache = useCallback(
     (referenceNo: string) => {
       queryClient.removeQueries({ queryKey: ["record", referenceNo] });
-      queryClient.setQueryData(
-        ["allRecords"],
-        (old: LastPayRecord[] | undefined) =>
-          old?.filter((r) => r.ref_no !== referenceNo),
-      );
       queryClient.invalidateQueries({ queryKey: ["allRecords"] });
     },
     [queryClient],
@@ -724,8 +715,7 @@ export function useQuitClaimActions({ data, ref_no, navigate }: Props) {
       onConfirm: async () => {
         try {
           setIsLoading(true);
-          await api.quitClaimActions.reopen(data.last_pay_record_id, actorName);
-          const fresh = await fetchFreshRecord(data.ref_no);
+          const { data: fresh } = await api.quitClaimActions.reopen(data.last_pay_record_id, actorName);
           syncCacheAndState(fresh, { exitEditMode: true });
           closeDialog();
           showToast(`Quit claim for ${data.emp_id} has been reopened.`);

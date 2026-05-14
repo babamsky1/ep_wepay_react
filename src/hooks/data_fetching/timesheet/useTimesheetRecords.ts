@@ -33,12 +33,7 @@ export const useTimesheetRecords = (page = 1, page_size = 25) => {
         return [];
       }
 
-      // Sort by upload date in descending order (newest first)
-      return records.sort((a: TimesheetRecord, b: TimesheetRecord) => {
-        const aTime = new Date(a.uploaded_at ?? "1970-01-01").getTime();
-        const bTime = new Date(b.uploaded_at ?? "1970-01-01").getTime();
-        return bTime - aTime;
-      });
+      return records;
     },
     ...QUERY_CONFIG,
     refetchOnWindowFocus: false,

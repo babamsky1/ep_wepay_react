@@ -80,11 +80,6 @@ export const useAccessRights = () => {
 
   // Map Employee to User interface
   const mapEmployeeToUser = useCallback((employee: Employee): User | null => {
-    // Skip employees without system_access or with 'N' (No access)
-    if (!employee.system_access || employee.system_access === "N") {
-      return null;
-    }
-
     return {
       id: employee.emp_id,
       name: `${employee.first_name || ""} ${employee.last_name || ""}`.trim(),
@@ -105,26 +100,13 @@ export const useAccessRights = () => {
       .filter((user): user is User => user !== null) as User[];
   }, [employees, mapEmployeeToUser]);
 
-  // Validate form data
-  const validateFormData = useCallback((formData: UserFormData): string | null => {
-    if (!formData.firstName.trim()) return "First name is required";
-    if (!formData.lastName.trim()) return "Last name is required";
-    if (!formData.email.trim()) return "Email is required";
-    if (!formData.role) return "Role is required";
-    if (!formData.password.trim()) return "Password is required";
-    if (formData.password !== formData.confirmPassword) return "Passwords do not match";
-    return null;
-  }, []);
-
   const createUser = useCallback(async (formData: UserFormData) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      // Validate form data
-      const validationError = validateFormData(formData);
-      if (validationError) {
-        throw new Error(validationError);
+      if (formData.password !== formData.confirmPassword) {
+        return { success: false, error: "Passwords do not match" };
       }
 
       const payload: EmployeeCreatePayload = {
@@ -145,8 +127,6 @@ export const useAccessRights = () => {
       return { success: true };
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Failed to create user";
-      setError(errorMessage);
-      toast.error(errorMessage);
       return { success: false, error: errorMessage };
     } finally {
       setIsLoading(false);
@@ -158,19 +138,8 @@ export const useAccessRights = () => {
     setError(null);
 
     try {
-      // Validate form data (password is optional for updates)
-      if (formData.password) {
-        const validationError = validateFormData(formData);
-        if (validationError && validationError !== "Password is required") {
-          throw new Error(validationError);
-        }
-      } else {
-        // Validate other fields without password
-        const tempFormData = { ...formData, password: "temp", confirmPassword: "temp" };
-        const validationError = validateFormData(tempFormData);
-        if (validationError && validationError !== "Password is required") {
-          throw new Error(validationError);
-        }
+      if (formData.password && formData.password !== formData.confirmPassword) {
+        return { success: false, error: "Passwords do not match" };
       }
 
       const payload: EmployeeUpdatePayload = {
@@ -197,7 +166,6 @@ export const useAccessRights = () => {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Failed to update user";
       setError(errorMessage);
-      toast.error(errorMessage);
       return { success: false, error: errorMessage };
     } finally {
       setIsLoading(false);
@@ -232,6 +200,5 @@ export const useAccessRights = () => {
     error,
     clearError: () => setError(null),
     users,
-    validateFormData,
   };
 };

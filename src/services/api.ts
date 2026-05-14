@@ -42,7 +42,7 @@ type Api = {
 
   // Business logic endpoints - para sa quit claim actions
   quitClaimActions: {
-    updateStatus: (recordId: string, status: string, remark?: string, updatedBy?: string) => Promise<ApiResponse<void>>;
+    updateStatus: (recordId: string, status: string, remark?: string, updatedBy?: string) => Promise<ApiResponse<LastPayRecord>>;
     reopen: (recordId: string, updatedBy?: string) => Promise<ApiResponse<LastPayRecord>>;
   };
 

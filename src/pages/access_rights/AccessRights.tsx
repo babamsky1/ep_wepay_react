@@ -4,6 +4,7 @@ import { DataTable } from "@/components/layout/DataTable";
 import { Button } from "@/components/shared_components/button";
 import { StatusBadge } from "@/components/shared_components/StatusBadge";
 import { LoadingState } from "@/components/shared_components/LoadingState";
+import { toast } from "react-toastify";
 import { useAccessRights, type User } from "@/hooks/access_rights/useAccessRights";
 import { useTableFilters } from "@/hooks/table_filters/useTableFilters";
 import { useEmployeeActionLogLazy } from "@/hooks/action_log/useActionLog";
@@ -216,7 +217,7 @@ const AccessRights = () => {
         queryClient.invalidateQueries({ queryKey: ["employees"] });
         queryClient.invalidateQueries({ queryKey: ["actionLog", "Employee"] });
       } else {
-        alert(result.error || "Failed to update user");
+        toast.error(result.error || "Failed to update user");
         setIsConfirmModalOpen(false);
       }
     } else {
@@ -227,7 +228,7 @@ const AccessRights = () => {
         queryClient.invalidateQueries({ queryKey: ["employees"] });
         queryClient.invalidateQueries({ queryKey: ["actionLog", "Employee"] });
       } else {
-        alert(result.error || "Failed to create user");
+        toast.error(result.error || "Failed to create user");
         setIsConfirmModalOpen(false);
       }
     }
