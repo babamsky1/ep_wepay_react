@@ -62,6 +62,7 @@ export interface GeneralLog {
 }
 
 export interface LastPayRecord {
+  remaining_days: number;
   last_pay_record_id: string;
   ref_no: string;
   lp_status: QuitClaimStatus;

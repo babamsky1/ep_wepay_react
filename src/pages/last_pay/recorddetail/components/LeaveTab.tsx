@@ -10,9 +10,8 @@ const LeaveTab = () => {
 
   // Calculate leave summary from monthly breakdown
   const totalDaysUsed = record.leave_monthly_breakdown?.reduce((sum, entry) => sum + Number(entry.days_used || 0), 0) || 0;
-  const totalRemaining = record.leave_monthly_breakdown?.reduce((sum, entry) => sum + Number(entry.remaining || 0), 0) || 0;
-  const dailyRate = Number(record.daily_rate || 0);
-  const totalLeaveAmount = totalRemaining * dailyRate;
+  const sortedBreakdown = record.leave_monthly_breakdown?.sort((a, b) => (a.coverage_month || 0) - (b.coverage_month || 0)) || [];
+  const totalRemaining = sortedBreakdown.length > 0 ? Number(sortedBreakdown[sortedBreakdown.length - 1].remaining || 0) : 0;
 
   return (
     <div className="space-y-5">
@@ -93,7 +92,7 @@ const LeaveTab = () => {
         <div className="flex justify-between text-sm">
           <span className="text-gray-600">Daily Rate</span>
           <span className="font-medium">
-            {formatCurrency(dailyRate)}
+            {formatCurrency(Number(record.daily_rate || 0))}
           </span>
         </div>
         <div className="flex justify-between items-left pt-2 border-t border-green-300">
@@ -101,7 +100,7 @@ const LeaveTab = () => {
             Total Leave Conversion Amount
           </span>
           <span className="text-lg font-bold text-green-600">
-            {formatCurrency(totalLeaveAmount)}
+            {formatCurrency(record.lp_total_leave || 0)}
           </span>
         </div>
       </div>
