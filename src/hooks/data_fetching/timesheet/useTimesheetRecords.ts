@@ -7,11 +7,7 @@ const QUERY_CONFIG = {
   gcTime: 10 * 60 * 1000   // 10 minutes
 } as const;
 
-/**
- * Hook for fetching all timesheet records
- * Used by TimesheetUploading component
- * Returns records sorted by upload date in descending order (newest first)
- */
+// Timesheet records hook
 export const useTimesheetRecords = (page = 1, page_size = 25) => {
   return useQuery<TimesheetRecord[]>({
     queryKey: ["timesheetRecords", page, page_size],

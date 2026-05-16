@@ -40,7 +40,6 @@ interface Modals {
 }
 
 // ---- Constants ----
-
 const CLOSED_DIALOG: Dialog = {
   isOpen: false,
   title: "",
@@ -56,8 +55,6 @@ const CONFLICT_MSG = {
   deleteAborted:
     "Delete aborted: this record was modified by another user. Please review the latest data before deleting.",
 };
-
-// ---- Helpers ----
 
 // Checks if an error came from a version conflict on the server.
 function isConflictError(

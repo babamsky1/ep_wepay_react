@@ -21,10 +21,7 @@ export interface EmployeeSearchParams {
   emp_name?: string;
 }
 
-/**
- * Hook for searching specific employees by ID or name
- * Used in EmployeeSearchDialog for finding specific employees
- */
+// Employee search hook
 export function useEmployeeSearch(searchParams?: EmployeeSearchParams) {
   const emp_id = searchParams?.emp_id?.trim();
   const emp_name = searchParams?.emp_name?.trim();
@@ -48,6 +45,7 @@ export function useEmployeeSearch(searchParams?: EmployeeSearchParams) {
   });
 }
 
+// All employees hook
 export function useAllEmployees(page = 1, page_size = 25) {
   return useQuery<Employee[]>({
     queryKey: ["employees", page, page_size],

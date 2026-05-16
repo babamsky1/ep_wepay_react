@@ -45,6 +45,7 @@ export function useGeneration({ onClose, onGenerated }: UseGenerationProps) {
       const { data: savedRecord } = await api.lastPayGeneration.generate({
         emp_id: selectedEmployee.emp_id,
         active_user: user?.name || "system",
+        timesheet_id: "",
       });
 
       queryClient.setQueryData(["record", savedRecord.ref_no], savedRecord);

@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 
 const QUERY_CONFIG = { staleTime: 5 * 60 * 1000, gcTime: 10 * 60 * 1000 } as const;
 
+// last pay page for hooking ALL records in the table (uses pagination to reduce request)
 export const useAllRecords = (page = 1, page_size = 25) => {
   const query = useQuery({
     queryKey: ["allRecords", page, page_size],
@@ -17,6 +18,7 @@ export const useAllRecords = (page = 1, page_size = 25) => {
   return query;
 };
 
+// last pay page for hooking a SINGLE record by ref_no
 export const useSingleRecord = (ref_no: string) => {
   return useQuery({
     queryKey: ["record", ref_no],

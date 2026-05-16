@@ -5,8 +5,6 @@ import { AdditionalsType } from "@/types/lastPayTypes";
 import { useMemo, useState, useEffect, useCallback } from "react";
 import { getTimestamp } from "@/helpers/dateUtils";
 
-// ─── Module-level constants (avoid re-creating on every render) ───────────────
-
 const ROLE_IDS: Record<string, number> = {
   superadmin: 1,
   finance: 2,
@@ -14,8 +12,7 @@ const ROLE_IDS: Record<string, number> = {
   manager: 4,
 };
 
-// ─── Types ────────────────────────────────────────────────────────────────────
-
+// Types
 interface UseLineItemsProps {
   items: AdditionalsType[];
   type: "P" | "D";
@@ -24,8 +21,7 @@ interface UseLineItemsProps {
   isEditing?: boolean;
 }
 
-// ─── Hook ─────────────────────────────────────────────────────────────────────
-
+// Hook
 export function useLineItems({
   items,
   type,
@@ -87,19 +83,6 @@ export function useLineItems({
       return dateB - dateA;
     });
   }, [items, role]);
-
-  // Helper so callers never have to manage raw indices themselves.
-  // Accepts any item (from visibleItems or elsewhere) and returns its index in
-  // the source `items` array via stable identity comparison.
-  const findItemIndex = useCallback(
-    (item: AdditionalsType): number =>
-      items.findIndex(
-        (it) =>
-          // prefer stable ID; fall back to object identity for new (unsaved) items
-          (item.ad_type_id && it.ad_type_id === item.ad_type_id) || it === item,
-      ),
-    [items],
-  );
 
   const resetForm = useCallback(() => {
     setForm({ label: "", amount: "", is_confidential: false });
@@ -193,9 +176,7 @@ export function useLineItems({
     resetForm,
   ]);
 
-  // startEdit and deleteItem accept the item object directly.
-  // The caller no longer needs to track which array (items vs visibleItems) the
-  // index came from — this eliminates the index-mismatch bug entirely.
+  // use for editing OWN line item (depends on the roles)
   const startEdit = useCallback(
     (item: AdditionalsType) => {
       if (!canEditItem(item)) {
@@ -227,9 +208,7 @@ export function useLineItems({
     [canEditItem, items, onItemsChange],
   );
 
-  // toggleConfidential also accepts the item directly.
-  // Roles that cannot toggle now receive an explicit error toast instead of
-  // silently doing nothing.
+  // use for making the line item to make it confidential or non-confidential
   const toggleConfidential = useCallback(
     (item: AdditionalsType) => {
       if (!canToggleConfidentialPerm(item, getCurrentUser())) {
@@ -263,6 +242,5 @@ export function useLineItems({
     toggleConfidential,
     visibleItems,
     canEditItem,
-    findItemIndex,
   };
 }
